@@ -1,0 +1,3 @@
+import Exibicao
+
+Exibicao.mostrarCaracteresUsados()
