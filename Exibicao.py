@@ -1,5 +1,3 @@
-from Tabuleiro import Tabuleiro
-
 #caracteres utilizados
 
 def mostrarCaracteresUsados():
@@ -11,11 +9,19 @@ def mostrarCaracteresUsados():
 def exibeTabuleiro():
   linhas  = 6
   colunas = 6 
-  sep = '  '
-  for i in range(linhas):
-    for j in range(colunas):
-        print('\u2588', end=sep)
-    print()
+
+  print("   ", end="")
+
+  for i in range(1, colunas+1):
+    print(f"{i:^5}", end="")
+    
+  print()
+
+  for letra in "ABCDEF":
+    print(f"{letra} |", end="")
+    for j in range(linhas):
+        print(f'{"\u2588":^5}', end="")
+    print("\n")
 
 if __name__ == "__main__":
   exibeTabuleiro()
