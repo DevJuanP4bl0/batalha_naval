@@ -1,4 +1,5 @@
 import Exibicao
+from Tabuleiro import Tabuleiro
 
 def menuPrincipal()->None:
     """Função que exibe o menu principal"""
@@ -9,7 +10,8 @@ def menuPrincipal()->None:
     print("3 - Sair")
 
 while True:
+    tabuleiroOculto = Tabuleiro(6, 6, 3, 5)
     menuPrincipal()
-    Exibicao.exibeTabuleiro(6, 6)
+    Exibicao.exibeTabuleiro(6, 6, tabuleiroOculto.tabuleiroOculto)
     break
 

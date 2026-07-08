@@ -5,6 +5,15 @@ class Tabuleiro:
     self.numLinhas = numLinhas
     self.numColunas = numColunas
     #
+    self.tabuleiroOculto = []
+
+    ## CRIANDO MATRIZ
+    for i in range(self.numLinhas):
+      linha = []
+      for j in range(self.numColunas):
+        linha.append('\u2588')
+      self.tabuleiroOculto.append(linha)
+    
     self.tabuleiro = [0] * (self.numColunas * self.numLinhas)
     #
     self.numNavios = numNavios
