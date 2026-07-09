@@ -57,8 +57,12 @@ def jogar()->None:
                 embarcacao = tabuleiro.indiceReversoPosicoesBarcos.get((linha, coluna))
 
                 if (embarcacao is None):
+                    pulaLinha()
+                    print("==> Água!!!!")
                     revelaPosicao(tabuleiro.tabuleiroOculto, linha, coluna, '_')
                 elif (embarcacao.startswith('b')):
+                    pulaLinha()
+                    print("==> Návio afundado!!!!")
                     revelaPosicao(tabuleiro.tabuleiroOculto, linha, coluna, 'X')
                     numNaviosAfundados += 1
                 elif (embarcacao.startswith('s')):
@@ -67,12 +71,16 @@ def jogar()->None:
                         revelaPosicao(tabuleiro.tabuleiroOculto, linha, coluna, '\u2316')
                     
                     elif (tabuleiro.indiceReversoPosicoesBarcos.get((linha-1, coluna)) == embarcacao):
+                        pulaLinha()
+                        print("==> Submarino afundado!!!!")
                         revelaPosicao(tabuleiro.tabuleiroOculto, linha, coluna, 'X')
                         revelaPosicao(tabuleiro.tabuleiroOculto, linha-1, coluna, 'X')
 
                         numSubmarinosAfundados += 1
 
                     elif (tabuleiro.indiceReversoPosicoesBarcos.get((linha, coluna-1)) == embarcacao):
+                        pulaLinha()
+                        print("==> Submarino afundado!!!!")
                         revelaPosicao(tabuleiro.tabuleiroOculto, linha, coluna, 'X')
                         revelaPosicao(tabuleiro.tabuleiroOculto, linha, coluna-1, 'X')
 
@@ -81,7 +89,7 @@ def jogar()->None:
                 numJogadas += 1
 
             except ValueError:
-                print("Entrada inválida - Digite uma coordenada entre A 1 e F 6")
+                print("==> Entrada inválida - Digite uma coordenada entre A 1 e F 6")
 
             if (numNaviosAfundados == NAVIOS and numSubmarinosAfundados == SUBMARINOS):
                 Exibicao.exibeTabuleiro(6, 6, tabuleiro.tabuleiroOculto)
