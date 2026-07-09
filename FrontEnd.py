@@ -1,5 +1,6 @@
 import Exibicao
 from Tabuleiro import Tabuleiro
+import Persistencia
 
 LINHAS = 6
 COLUNAS = 6
@@ -9,6 +10,20 @@ SUBMARINOS = 3
 def pulaLinha()->None:
     """Função responsável por pular linhas"""
     print("\n")
+
+def revelaPosicao(tabuleiro:list, linha:int, coluna:int, caractere:str)->None:
+    """Função responsável por revelar as posições."""
+    tabuleiro[linha][coluna] = caractere
+
+def vitoria(numJogadas:int)->None:
+    """Função responsável caso a pessoa vença"""
+    pulaLinha()
+    print("***** Você ganhou!!!!!! *****")
+    pulaLinha()
+    print("Melhores pontuações")
+    nome = input("Digite seu nome: ")
+    Persistencia.gravaArquivo(nome, numJogadas)
+    pulaLinha()
 
 def jogar()->None:
     """Função responsável pelo jogo"""
@@ -41,30 +56,32 @@ def jogar()->None:
             embarcacao = tabuleiro.indiceReversoPosicoesBarcos.get((linha, coluna))
 
             if (embarcacao is None):
-                print("AGUAAA")
-                tabuleiro.tabuleiroOculto[linha][coluna] = "_"
+                revelaPosicao(tabuleiro.tabuleiroOculto, linha, coluna, '_')
             elif (embarcacao.startswith('b')):
-                print("É BARCOOO")
-                tabuleiro.tabuleiroOculto[linha][coluna] = "X"
+                revelaPosicao(tabuleiro.tabuleiroOculto, linha, coluna, 'X')
                 numNaviosAfundados += 1
             elif (embarcacao.startswith('s')):
                 if (tabuleiro.indiceReversoPosicoesBarcos.get((linha+1, coluna)) == embarcacao or
                     tabuleiro.indiceReversoPosicoesBarcos.get((linha, coluna+1)) == embarcacao):
-                    tabuleiro.tabuleiroOculto[linha][coluna] = "O"
+                    revelaPosicao(tabuleiro.tabuleiroOculto, linha, coluna, '\u2316')
                 
                 elif (tabuleiro.indiceReversoPosicoesBarcos.get((linha-1, coluna)) == embarcacao):
-                    tabuleiro.tabuleiroOculto[linha][coluna] = "X"
-                    tabuleiro.tabuleiroOculto[linha-1][coluna] = "x"
+                    revelaPosicao(tabuleiro.tabuleiroOculto, linha, coluna, 'X')
+                    revelaPosicao(tabuleiro.tabuleiroOculto, linha-1, coluna, 'X')
 
                     numSubmarinosAfundados += 1
 
                 elif (tabuleiro.indiceReversoPosicoesBarcos.get((linha, coluna-1)) == embarcacao):
-                    tabuleiro.tabuleiroOculto[linha][coluna] = "X"
-                    tabuleiro.tabuleiroOculto[linha][coluna-1] = "x"
+                    revelaPosicao(tabuleiro.tabuleiroOculto, linha, coluna, 'X')
+                    revelaPosicao(tabuleiro.tabuleiroOculto, linha, coluna-1, 'X')
 
                     numSubmarinosAfundados += 1
 
             numJogadas += 1
+
+            if (numNaviosAfundados == NAVIOS and numSubmarinosAfundados == SUBMARINOS):
+                vitoria(numJogadas)
+                input()
 
 def menuPrincipal()->None:
     """Função que exibe o menu principal"""
