@@ -37,6 +37,7 @@ def jogar()->None:
     letras = ["A", "B", "C", "D", "E", "F"]
     numeros = ["1", "2", "3", "4", "5", "6"]
 
+    opcoesDigitadas = []
 
     while True:
         Exibicao.exibeTabuleiro(6, 6, tabuleiro.tabuleiroOculto)
@@ -54,6 +55,14 @@ def jogar()->None:
             try:
                 linha = letras.index(coordenada[0].upper())
                 coluna = numeros.index(coordenada[1])
+
+                if (opcao in opcoesDigitadas):
+                    pulaLinha()
+                    print("==> Erro: você já escolheu essa coordenada!")
+                    continue
+
+                opcoesDigitadas.append(opcao)
+
                 embarcacao = tabuleiro.indiceReversoPosicoesBarcos.get((linha, coluna))
 
                 if (embarcacao is None):
@@ -90,6 +99,8 @@ def jogar()->None:
 
             except ValueError:
                 print("==> Entrada inválida - Digite uma coordenada entre A 1 e F 6")
+            except IndexError:
+                print("==> Entrada inválida - Selecione a coluna que deseja jogar entre 1 a 6")
 
             if (numNaviosAfundados == NAVIOS and numSubmarinosAfundados == SUBMARINOS):
                 Exibicao.exibeTabuleiro(6, 6, tabuleiro.tabuleiroOculto)
