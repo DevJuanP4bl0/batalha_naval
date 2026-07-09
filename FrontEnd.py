@@ -24,6 +24,7 @@ def vitoria(numJogadas:int)->None:
     nome = input("Digite seu nome: ")
     Persistencia.gravaArquivo(nome, numJogadas)
     pulaLinha()
+    exibeEstatisticas()
 
 def jogar()->None:
     """Função responsável pelo jogo"""
@@ -80,11 +81,43 @@ def jogar()->None:
             numJogadas += 1
 
             if (numNaviosAfundados == NAVIOS and numSubmarinosAfundados == SUBMARINOS):
+                Exibicao.exibeTabuleiro(6, 6, tabuleiro.tabuleiroOculto)
                 vitoria(numJogadas)
-                input()
+                break
+
+def ordenaDicionario(dicionario:dict)->dict:
+    """Função responsável por organizar os dados de um dicionario com base nos valores"""
+
+    return dict(sorted(dicionario.items(), key=lambda item: item[1]))
+
+def estatisticas()->dict:
+    """Função responsável por receber os dados lidos do arquivo"""
+    jogadores = Persistencia.lerArquivo()
+    dict_jogadores = {}
+
+    for jogador in jogadores:
+        dados_jogador = jogador.split()
+        dict_jogadores[dados_jogador[0]] = int(dados_jogador[1])
+
+    ranking = ordenaDicionario(dict_jogadores)
+
+    return ranking
+
+def exibeEstatisticas()->None:
+    """Função responsável por exibir estatísticas"""
+    ranking = estatisticas()
+
+    pulaLinha()
+    print("==== Melhores Pontuações ====")
+    print(f'{"":<2} {"Nome":<15} {"# Jogadas":>10}')
+
+    for posicao, (nome, pontuacao) in enumerate(ranking.items(), start=1):
+        print(f'{posicao} {nome:<15} {pontuacao:>11}')
+    
 
 def menuPrincipal()->None:
     """Função que exibe o menu principal"""
+    pulaLinha()
     print("***** Batalha Naval *****")
     pulaLinha()
     print("1 - Jogar")
@@ -97,5 +130,10 @@ while True:
 
     if (opcao == "1"):
         jogar()
-    break
+    elif (opcao == "2"):
+        exibeEstatisticas()
+    elif (opcao == "3"):
+        break
+
+print("Finalizando programa")
 
