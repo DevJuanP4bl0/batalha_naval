@@ -51,34 +51,37 @@ def jogar()->None:
         else:
             coordenada = opcao.split()
 
-            linha = letras.index(coordenada[0])
-            coluna = numeros.index(coordenada[1])
+            try:
+                linha = letras.index(coordenada[0].upper())
+                coluna = numeros.index(coordenada[1])
+                embarcacao = tabuleiro.indiceReversoPosicoesBarcos.get((linha, coluna))
 
-            embarcacao = tabuleiro.indiceReversoPosicoesBarcos.get((linha, coluna))
-
-            if (embarcacao is None):
-                revelaPosicao(tabuleiro.tabuleiroOculto, linha, coluna, '_')
-            elif (embarcacao.startswith('b')):
-                revelaPosicao(tabuleiro.tabuleiroOculto, linha, coluna, 'X')
-                numNaviosAfundados += 1
-            elif (embarcacao.startswith('s')):
-                if (tabuleiro.indiceReversoPosicoesBarcos.get((linha+1, coluna)) == embarcacao or
-                    tabuleiro.indiceReversoPosicoesBarcos.get((linha, coluna+1)) == embarcacao):
-                    revelaPosicao(tabuleiro.tabuleiroOculto, linha, coluna, '\u2316')
-                
-                elif (tabuleiro.indiceReversoPosicoesBarcos.get((linha-1, coluna)) == embarcacao):
+                if (embarcacao is None):
+                    revelaPosicao(tabuleiro.tabuleiroOculto, linha, coluna, '_')
+                elif (embarcacao.startswith('b')):
                     revelaPosicao(tabuleiro.tabuleiroOculto, linha, coluna, 'X')
-                    revelaPosicao(tabuleiro.tabuleiroOculto, linha-1, coluna, 'X')
+                    numNaviosAfundados += 1
+                elif (embarcacao.startswith('s')):
+                    if (tabuleiro.indiceReversoPosicoesBarcos.get((linha+1, coluna)) == embarcacao or
+                        tabuleiro.indiceReversoPosicoesBarcos.get((linha, coluna+1)) == embarcacao):
+                        revelaPosicao(tabuleiro.tabuleiroOculto, linha, coluna, '\u2316')
+                    
+                    elif (tabuleiro.indiceReversoPosicoesBarcos.get((linha-1, coluna)) == embarcacao):
+                        revelaPosicao(tabuleiro.tabuleiroOculto, linha, coluna, 'X')
+                        revelaPosicao(tabuleiro.tabuleiroOculto, linha-1, coluna, 'X')
 
-                    numSubmarinosAfundados += 1
+                        numSubmarinosAfundados += 1
 
-                elif (tabuleiro.indiceReversoPosicoesBarcos.get((linha, coluna-1)) == embarcacao):
-                    revelaPosicao(tabuleiro.tabuleiroOculto, linha, coluna, 'X')
-                    revelaPosicao(tabuleiro.tabuleiroOculto, linha, coluna-1, 'X')
+                    elif (tabuleiro.indiceReversoPosicoesBarcos.get((linha, coluna-1)) == embarcacao):
+                        revelaPosicao(tabuleiro.tabuleiroOculto, linha, coluna, 'X')
+                        revelaPosicao(tabuleiro.tabuleiroOculto, linha, coluna-1, 'X')
 
-                    numSubmarinosAfundados += 1
+                        numSubmarinosAfundados += 1
 
-            numJogadas += 1
+                numJogadas += 1
+
+            except ValueError:
+                print("Entrada inválida - Digite uma coordenada entre A 1 e F 6")
 
             if (numNaviosAfundados == NAVIOS and numSubmarinosAfundados == SUBMARINOS):
                 Exibicao.exibeTabuleiro(6, 6, tabuleiro.tabuleiroOculto)
@@ -131,9 +134,19 @@ while True:
     if (opcao == "1"):
         jogar()
     elif (opcao == "2"):
-        exibeEstatisticas()
+        try:
+            exibeEstatisticas()
+        except FileNotFoundError as error:
+            pulaLinha()
+            print(str(error))
+        except ValueError as valueError:
+            pulaLinha()
+            print(str(valueError))
     elif (opcao == "3"):
         break
+    else:
+        pulaLinha()
+        print("Opção inválida!")
 
 print("Finalizando programa")
 
